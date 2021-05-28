@@ -11,7 +11,8 @@ public class PlayerStateMachine : StateMachine
     protected override StatesTypes GetCurrentState() {
         InputStruct input = CaptureInput();
 
-        if (input.move.magnitude != 0) {
+        if (input.move.magnitude != 0)
+        {
             return StatesTypes.Walk;
         }
 
