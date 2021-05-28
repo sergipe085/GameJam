@@ -1,5 +1,6 @@
+using UnityEngine;
+
 public struct InputStruct {
-    public float xMove;
-    public float zMove;
-    public bool  jump;
+    public Vector2 move;
+    public bool    jump;
 }

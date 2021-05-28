@@ -7,8 +7,7 @@ public class InputManager : MonoBehaviour
     public static InputStruct CaptureInput() {
         InputStruct inputStruct = new InputStruct();
 
-        inputStruct.xMove = Input.GetAxis("Horizontal");
-        inputStruct.zMove = Input.GetAxis("Vertical");
+        inputStruct.move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         return inputStruct;
     }
