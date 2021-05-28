@@ -14,6 +14,10 @@ public class StateMachine : MonoBehaviour
     private Action[] exitStateActions;
     private StatesTypes currentState = StatesTypes.Idle;
 
+    protected virtual void Start() {
+
+    }
+
     protected virtual void Awake() {
         InitializeStates();
 

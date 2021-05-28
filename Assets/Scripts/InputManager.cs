@@ -4,10 +4,25 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public static InputStruct CaptureInput() {
-        InputStruct inputStruct = new InputStruct();
+    //Non-Static Variables
+    [SerializeField] private float sensitivity = 10.0f;
 
-        inputStruct.move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    //Static Variables
+    private static InputStruct inputStruct = new InputStruct();
+    private static float staticSensitivity;
+
+    private void Start() {
+        
+    }
+
+    private void Update() {
+        staticSensitivity = sensitivity;
+    }
+
+    public static InputStruct CaptureInput() {
+        inputStruct.move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        inputStruct.look.x += Input.GetAxis("Mouse X") * Time.deltaTime * staticSensitivity;
+        inputStruct.look.y += Input.GetAxis("Mouse Y") * Time.deltaTime * staticSensitivity;
 
         return inputStruct;
     }
