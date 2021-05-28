@@ -21,6 +21,7 @@ public class PlayerStateMachine : StateMachine
 
     protected override void Update() {
         base.Update();
+        
         input = InputManager.CaptureInput();
 
         LookAtCamera();
