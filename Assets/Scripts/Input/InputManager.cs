@@ -5,26 +5,45 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     //Non-Static Variables
+    [Header("INPUTS KEYS")]
+    [SerializeField] private KeyCode jumpKey = KeyCode.None;
+    [SerializeField] private KeyCode rewindKey = KeyCode.None;
+    [SerializeField] private KeyCode attackKey = KeyCode.None;
+    [SerializeField] private KeyCode interactKey = KeyCode.None;
     public float sensitivity = 10.0f;
 
     //Static Variables
     public static InputManager instance;
     private static InputStruct inputStruct = new InputStruct();
-    private static bool enabled = true;
+    private static bool inputEnabled = true;
+
+    [Header("INPUTS KEYS STATIC")]
+    private static KeyCode jumpKeyStatic = KeyCode.None;
+    private static KeyCode rewindKeyStatic = KeyCode.None;
+    private static KeyCode attackKeyStatic = KeyCode.None;
+    private static KeyCode interactKeyStatic = KeyCode.None;
 
     private void Awake() {
         instance = this;
     }
 
+    private void Update() {
+        jumpKeyStatic = jumpKey;
+        rewindKeyStatic = rewindKey;
+        attackKeyStatic = attackKey;
+        interactKeyStatic = interactKey;
+    }
+
     public static InputStruct CaptureInput() {
-        if (enabled) {
+        if (inputEnabled) {
             inputStruct.move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             inputStruct.look.x = Input.GetAxis("Mouse X");
             inputStruct.look.y = Input.GetAxis("Mouse Y");
             inputStruct.look.y = Mathf.Clamp(inputStruct.look.y, -90, 90);
-            inputStruct.jump = Input.GetButtonDown("Jump");
+            inputStruct.jump = Input.GetKeyDown(jumpKeyStatic);
             inputStruct.attack = Input.GetMouseButtonDown(0);
-            inputStruct.rewind = Input.GetKeyDown(KeyCode.LeftShift);
+            inputStruct.rewind = Input.GetKeyDown(rewindKeyStatic);
+            inputStruct.interact = Input.GetKeyDown(interactKeyStatic);
         }
         else {
             inputStruct.move = Vector2.zero;
@@ -40,6 +59,6 @@ public class InputManager : MonoBehaviour
     }
 
     public static void EnableInput(bool _enabled) {
-        enabled = _enabled;
+        inputEnabled = _enabled;
     }
 }

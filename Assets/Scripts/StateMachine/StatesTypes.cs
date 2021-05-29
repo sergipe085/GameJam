@@ -1,1 +1,1 @@
-public enum StatesTypes { Idle = 0, Walk, Jump, Attack, Rewind }
+public enum StatesTypes { Idle = 0, Walk, Jump, Attack, Rewind, Interact }

@@ -34,6 +34,10 @@ public class PlayerStateMachine : StateMachine
             return StatesTypes.Rewind;
         }
 
+        if (input.interact) {
+            return StatesTypes.Interact;
+        }
+
         if (input.jump && OnGround()) {
             return StatesTypes.Jump;
         }

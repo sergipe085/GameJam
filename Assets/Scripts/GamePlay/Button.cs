@@ -5,9 +5,10 @@ using UnityEngine.Events;
 
 public class Button : MonoBehaviour
 {
-    public UnityEvent onClickButtonEvent = null;
+    [SerializeField] private UnityEvent onClickButtonEvent = null;
 
     public void Click() {
+        print("Click");
         onClickButtonEvent?.Invoke();
     }
 }

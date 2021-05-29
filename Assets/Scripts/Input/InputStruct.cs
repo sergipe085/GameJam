@@ -6,4 +6,5 @@ public struct InputStruct {
     public bool    jump;
     public bool    attack;
     public bool    rewind;
+    public bool    interact;
 }
