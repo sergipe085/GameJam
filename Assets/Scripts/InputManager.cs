@@ -25,6 +25,7 @@ public class InputManager : MonoBehaviour
         inputStruct.look.y += Input.GetAxis("Mouse Y") * Time.deltaTime * staticSensitivity;
         inputStruct.look.y  = Mathf.Clamp(inputStruct.look.y, -90, 90);
         inputStruct.jump    = Input.GetButtonDown("Jump");
+        inputStruct.attack  = Input.GetMouseButtonDown(0);
 
         return inputStruct;
     }

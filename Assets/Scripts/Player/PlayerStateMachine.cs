@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerStateMachine : StateMachine
 {
+    [Header("STATES CHECKERS")]
+    private bool isJumping = false;
+
     protected override StatesTypes GetCurrentState() {
         InputStruct input = InputManager.CaptureInput();
 
@@ -11,8 +14,11 @@ public class PlayerStateMachine : StateMachine
             return StatesTypes.Jump;
         }
 
-        if (input.move.magnitude != 0)
-        {
+        if (input.attack) {
+            return StatesTypes.Attack;
+        }
+
+        if (input.move.magnitude != 0) {
             return StatesTypes.Walk;
         }
 
