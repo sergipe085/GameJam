@@ -28,8 +28,11 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        //increase gravity force
-        //Physics.gravity = Vector3.down * 40.0f;
+        //Ignore collision with weapons
+        WeaponCollider[] weapons = cameraHandler.GetComponentsInChildren<WeaponCollider>();
+        for (int i = 0; i < weapons.Length; i++) {
+            Physics.IgnoreCollision(GetComponent<Collider>(), weapons[i].GetComponent<Collider>(), true);
+        }
     }
 
     private void Update() {
