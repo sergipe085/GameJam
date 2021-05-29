@@ -6,34 +6,37 @@ public class PlayerStateMachine : StateMachine
 {
     public static PlayerStateMachine instance;
 
+    [Header("CORE")]
+    [SerializeField] LayerMask groundLayer;
+
     [Header("STATES CHECKERS")]
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isRewinding = false;
 
     [Header("REWIND")]
     [SerializeField] private int rewindLength = 120;
-    public List<RewindStruct> rewindPositions = new List<RewindStruct>();
+    public RewindStruct rewindPosition;
+    public List<RewindStruct> rewindStructArray = new List<RewindStruct>();
 
     protected override void Awake() {
         base.Awake();
         instance = this;
     }
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
-        base.Update();
+        base.FixedUpdate();
 
-        if (!isRewinding) {
+        if (OnGround()) {
             RewindStruct rewindStruct = new RewindStruct();
-
             rewindStruct.position = transform.position;
-            rewindStruct.rotation = Camera.main.transform.parent.transform.rotation;
-            rewindStruct.horizontal = PlayerController.instance.horizontal;
-            rewindStruct.vertical = PlayerController.instance.vertical;
 
-            rewindPositions.Add(rewindStruct);
-            if (rewindPositions.Count > rewindLength) {
-                rewindPositions.RemoveAt(0);
+            if (!isRewinding) {
+                rewindStructArray.Add(rewindStruct);
+                if (rewindStructArray.Count > rewindLength) {
+                    rewindStructArray.RemoveAt(0);
+                }
+                rewindPosition = rewindStructArray[0];
             }
         }
     }
@@ -46,7 +49,7 @@ public class PlayerStateMachine : StateMachine
             return StatesTypes.Rewind;
         }
 
-        if (input.jump) {
+        if (input.jump && OnGround()) {
             return StatesTypes.Jump;
         }
 
@@ -59,5 +62,9 @@ public class PlayerStateMachine : StateMachine
         }
 
         return StatesTypes.Idle;
+    }
+
+    private bool OnGround() {
+        return Physics.Raycast(transform.position, Vector3.down, 0.2f, groundLayer);
     }
 }

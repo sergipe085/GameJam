@@ -41,7 +41,7 @@ public class StateMachine : MonoBehaviour
         }
     }
      
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         int currentStateIndex = (int)GetCurrentState();
 
         if (fixedTickActions[currentStateIndex] != null) {
