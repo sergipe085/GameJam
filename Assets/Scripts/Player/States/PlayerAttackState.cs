@@ -30,7 +30,9 @@ public class PlayerAttackState : State
     public override void EnterState()
     {
         base.EnterState();
+
         anim.SetTrigger("attack");
+        CameraController.instance.StartScreenShake(0.3f, 0.06f, 1f);
     }
 
     public override void ExitState()
