@@ -5,27 +5,23 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     //Non-Static Variables
-    [SerializeField] private float sensitivity = 10.0f;
+    public float sensitivity = 10.0f;
 
     //Static Variables
+    public static InputManager instance;
     private static InputStruct inputStruct = new InputStruct();
-    private static float staticSensitivity;
 
-    private void Start() {
-        
-    }
-
-    private void Update() {
-        staticSensitivity = sensitivity;
+    private void Awake() {
+        instance = this;
     }
 
     public static InputStruct CaptureInput() {
-        inputStruct.move    = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        inputStruct.look.x += Input.GetAxis("Mouse X") * Time.deltaTime * staticSensitivity;
-        inputStruct.look.y += Input.GetAxis("Mouse Y") * Time.deltaTime * staticSensitivity;
-        inputStruct.look.y  = Mathf.Clamp(inputStruct.look.y, -90, 90);
-        inputStruct.jump    = Input.GetButtonDown("Jump");
-        inputStruct.attack  = Input.GetMouseButtonDown(0);
+        inputStruct.move   = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        inputStruct.look.x = Input.GetAxis("Mouse X");
+        inputStruct.look.y = Input.GetAxis("Mouse Y");
+        inputStruct.look.y = Mathf.Clamp(inputStruct.look.y, -90, 90);
+        inputStruct.jump   = Input.GetButtonDown("Jump");
+        inputStruct.attack = Input.GetMouseButtonDown(0);
 
         return inputStruct;
     }

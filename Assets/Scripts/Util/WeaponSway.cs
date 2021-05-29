@@ -11,10 +11,14 @@ public class WeaponSway : MonoBehaviour
     }
 
     private void Update() {
-        float horizontal = -Input.GetAxis("Mouse X") * 0.5f;
-        float vertical   = -Input.GetAxis("Mouse Y") * 0.5f;
+        InputStruct input = InputManager.CaptureInput();
 
-        Vector3 targetPosition = new Vector3(horizontal, vertical, 0f);
+        float lookX = -input.look.x * 0.2f;
+        float lookY = -input.look.y * 0.2f;
+        float moveX = -input.move.x * 0.14f;
+        float moveY = -input.move.y * 0.14f;
+
+        Vector3 targetPosition = new Vector3(lookX + moveX, lookY, moveY);
         transform.localPosition = Vector3.Lerp(transform.localPosition,  initialPosition + targetPosition, 5f * Time.deltaTime);    
     }
 }

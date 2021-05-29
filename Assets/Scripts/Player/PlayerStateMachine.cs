@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStateMachine : StateMachine
 {
     [Header("STATES CHECKERS")]
-    private bool isJumping = false;
+    public bool isAttacking = false;
 
     protected override StatesTypes GetCurrentState() {
         InputStruct input = InputManager.CaptureInput();
@@ -15,6 +15,7 @@ public class PlayerStateMachine : StateMachine
         }
 
         if (input.attack) {
+            isAttacking = true;
             return StatesTypes.Attack;
         }
 

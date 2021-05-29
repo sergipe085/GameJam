@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [Header("CAMERA")]
     [SerializeField] private float cameraSpeed = 10.0f;
     private Transform cameraHandler = null;
+    private float horizontal = 0.0f, vertical = 0.0f;
 
     #region MonoBehaviour
 
@@ -42,8 +43,11 @@ public class PlayerController : MonoBehaviour
     #region GameplayMethods
 
     private void LookAtCamera() {
-        transform.rotation = Quaternion.Euler(0f, input.look.x, 0f);
-        cameraHandler.transform.localRotation = Quaternion.Euler(-input.look.y, input.look.x, 0f);
+        horizontal += input.look.x * Time.deltaTime * InputManager.instance.sensitivity;
+        vertical   += input.look.y * Time.deltaTime * InputManager.instance.sensitivity;
+
+        transform.rotation = Quaternion.Euler(0f, horizontal, 0f);
+        cameraHandler.transform.localRotation = Quaternion.Euler(-vertical, horizontal, 0f);
         cameraHandler.transform.position = Vector3.Lerp(cameraHandler.transform.position, transform.position + Vector3.up * 2, cameraSpeed * Time.deltaTime);
     }
 
