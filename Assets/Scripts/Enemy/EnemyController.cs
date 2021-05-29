@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody hips;
+    [Header("CORE")]
+    private bool canTakeDamage = true;
+    
+    [Header("EFFECTS")]
+    [SerializeField] private GameObject bloodParticle = null;
 
     public void TakeDamage(Vector3 impactPoint, Vector3 impactDirection, float damage) {
-        hips.AddForceAtPosition (hips.transform.position, impactDirection * 10000f * Time.fixedDeltaTime);
-        print("aa");
+        if (canTakeDamage) {
+            canTakeDamage = false;
+            Invoke(nameof(CanTakeDamage), 0.5f);
+            Instantiate(bloodParticle, impactPoint, Quaternion.LookRotation(impactDirection));
+        }
+    }
+
+    private void CanTakeDamage() {
+        canTakeDamage = true;
     }
 }

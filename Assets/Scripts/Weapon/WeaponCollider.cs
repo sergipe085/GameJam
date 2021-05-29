@@ -4,19 +4,10 @@ using UnityEngine;
 
 public class WeaponCollider : MonoBehaviour
 {
-    public GameObject cube;
-
     private void OnCollisionEnter(Collision other) {
         EnemyController enemy = other.transform.GetComponentInParent<EnemyController>();
-        if (enemy) {
+        if (enemy && PlayerStateMachine.instance.isAttacking) {
             enemy.TakeDamage(other.contacts[0].point, other.contacts[0].normal, 10.0f);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other) {
-        EnemyController enemy = other.transform.GetComponentInParent<EnemyController>();
-        if (enemy) {
-            enemy.TakeDamage(Vector3.zero, transform.forward, 10.0f);
         }
     }
 
