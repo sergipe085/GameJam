@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
             canTakeDamage = false;
             Invoke(nameof(CanTakeDamage), 0.5f);
             Instantiate(bloodParticle, impactPoint, Quaternion.LookRotation(impactDirection));
+            CameraController.instance.StartScreenShake(0.1f, 0.06f, 1f);
         }
     }
 

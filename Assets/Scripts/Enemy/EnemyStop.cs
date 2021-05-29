@@ -8,6 +8,6 @@ public class EnemyStop : MonoBehaviour
     public float stopForce = 15.0f;
 
     private void FixedUpdate() {
-        hipsRig.velocity = Vector3.Lerp(hipsRig.velocity, Vector3.zero, stopForce * Time.deltaTime);
+        hipsRig.velocity = Vector3.Lerp(hipsRig.velocity, new Vector3(0f, hipsRig.velocity.y, 0f), stopForce * Time.deltaTime);
     }
 }

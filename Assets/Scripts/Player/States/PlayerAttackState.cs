@@ -41,7 +41,7 @@ public class PlayerAttackState : State
         anim.SetTrigger("attack");
         anim.SetFloat("attackDir", attackIndex);
 
-        CameraController.instance.StartScreenShake(0.3f, 0.06f, 1f);
+        //CameraController.instance.StartScreenShake(0.3f, 0.06f, 1f);
 
         PlayerStateMachine.instance.isAttacking = true;
     }
