@@ -14,9 +14,7 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public bool isRewinding = false;
 
     [Header("REWIND")]
-    [SerializeField] private int rewindLength = 120;
-    public RewindStruct rewindPosition;
-    public List<RewindStruct> rewindStructArray = new List<RewindStruct>();
+    public Vector3? rewindLocation = null;
 
     protected override void Awake() {
         base.Awake();
@@ -26,19 +24,6 @@ public class PlayerStateMachine : StateMachine
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-
-        if (OnGround()) {
-            RewindStruct rewindStruct = new RewindStruct();
-            rewindStruct.position = transform.position;
-
-            if (!isRewinding) {
-                rewindStructArray.Add(rewindStruct);
-                if (rewindStructArray.Count > rewindLength) {
-                    rewindStructArray.RemoveAt(0);
-                }
-                rewindPosition = rewindStructArray[0];
-            }
-        }
     }
 
     protected override StatesTypes GetCurrentState() {

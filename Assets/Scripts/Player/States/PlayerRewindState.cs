@@ -14,40 +14,48 @@ public class PlayerRewindState : State
 
     public override void Init()
     {
-        
+        volume = GameObject.FindObjectOfType<PostProcessVolume>().GetComponent<PostProcessVolume>();
+        volume.profile.TryGetSettings(out lensDistortion);
     }
 
     public override void EnterState()
     {
+        if (PlayerStateMachine.instance.rewindLocation == null) {
+            PlayerStateMachine.instance.rewindLocation = transform.position;
+            CameraController.instance.StartScreenShake(0.2f, 0.02f, 1.0f);
+            StartCoroutine(CantRewind());
+            return;
+        }
+
         StartCoroutine(Rewind(transform.position));
 
         InputManager.EnableInput(false);
     }
 
-    public override void ExitState()
-    {
-        StartCoroutine(ResetRewind());
-        PlayerStateMachine.instance.rewindStructArray.Clear();
+    private IEnumerator CantRewind() {
+        yield return StartCoroutine(RewindEffect(0.1f, 0, 60));
+        yield return StartCoroutine(RewindEffect(0.1f, 60, 0));
     }
 
     private IEnumerator Rewind(Vector3 _initialPosition) {
         PlayerStateMachine.instance.isRewinding = true;
+
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Collider>().enabled = false;
         GetComponent<ExtraGravity>().enabled = false;
 
-        RewindStruct rewindStruct = PlayerStateMachine.instance.rewindPosition;
+        Vector3 rewindLocation = PlayerStateMachine.instance.rewindLocation.Value;
 
         float time = 0f;
-
-        while(time <= rewindTime) {
+        while (time <= rewindTime) {
             float t = time / rewindTime;
 
             volume = FindObjectOfType<PostProcessVolume>().GetComponent<PostProcessVolume>();
             volume.profile.TryGetSettings(out lensDistortion);
             lensDistortion.intensity.value = Mathf.Lerp(0f, -100f, t);
 
-            transform.position = Vector3.Lerp(_initialPosition, rewindStruct.position + Vector3.up, t);
+            transform.position = Vector3.Lerp(_initialPosition, rewindLocation + Vector3.up, t);
 
             time += Time.deltaTime;
             yield return null;
@@ -55,17 +63,21 @@ public class PlayerRewindState : State
 
         PlayerStateMachine.instance.isRewinding = false;
         GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Collider>().enabled = true;
         GetComponent<ExtraGravity>().enabled = true;
+        PlayerStateMachine.instance.rewindLocation = null;
+
+        yield return StartCoroutine(RewindEffect(0.3f, -100, 0));
     }
 
-    private IEnumerator ResetRewind() {
+    public IEnumerator RewindEffect(float duration, float from, float to) {
         float time = 0;
 
-        while (time <= 0.3f)
+        while (time <= duration)
         {
-            float t = time / 0.3f;
+            float t = time / duration;
 
-            lensDistortion.intensity.value = Mathf.Lerp(-100, 0, t);
+            lensDistortion.intensity.value = Mathf.Lerp(from, to, t);
 
             time += Time.deltaTime;
             yield return null;
@@ -73,12 +85,4 @@ public class PlayerRewindState : State
 
         InputManager.EnableInput(true);
     }
-}
-
-[Serializable]
-public struct RewindStruct {
-    public Vector3 position;
-    public Quaternion rotation;
-    public float horizontal;
-    public float vertical;
 }
