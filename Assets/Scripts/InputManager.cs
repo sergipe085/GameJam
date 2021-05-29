@@ -20,10 +20,11 @@ public class InputManager : MonoBehaviour
     }
 
     public static InputStruct CaptureInput() {
-        inputStruct.move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        inputStruct.move    = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         inputStruct.look.x += Input.GetAxis("Mouse X") * Time.deltaTime * staticSensitivity;
         inputStruct.look.y += Input.GetAxis("Mouse Y") * Time.deltaTime * staticSensitivity;
-        inputStruct.look.y = Mathf.Clamp(inputStruct.look.y, -90, 90);
+        inputStruct.look.y  = Mathf.Clamp(inputStruct.look.y, -90, 90);
+        inputStruct.jump    = Input.GetButtonDown("Jump");
 
         return inputStruct;
     }

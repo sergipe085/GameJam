@@ -10,6 +10,7 @@ public class StateMachine : MonoBehaviour
     //Actions
     private Action[] initiActions;
     private Action[] tickActions;
+    private Action[] fixedTickActions;
     private Action[] enterStateActions;
     private Action[] exitStateActions;
     private StatesTypes currentState = StatesTypes.Idle;
@@ -31,12 +32,20 @@ public class StateMachine : MonoBehaviour
     protected virtual void Update() {
         int currentStateIndex = (int) GetCurrentState();
 
-        if (tickActions[(int)GetCurrentState()] != null) {
-            tickActions[(int)GetCurrentState()].Invoke();
+        if (tickActions[currentStateIndex] != null) {
+            tickActions[currentStateIndex].Invoke();
         }
 
         if (CheckIfStateChanged()) {
             enterStateActions[currentStateIndex].Invoke();
+        }
+    }
+     
+    private void FixedUpdate() {
+        int currentStateIndex = (int)GetCurrentState();
+
+        if (fixedTickActions[currentStateIndex] != null) {
+            fixedTickActions[currentStateIndex].Invoke();
         }
     }
 
@@ -47,10 +56,12 @@ public class StateMachine : MonoBehaviour
         tickActions         = new Action[len2];
         enterStateActions   = new Action[len2];
         exitStateActions    = new Action[len2];
+        fixedTickActions    = new Action[len2];
 
         for (int i = 0; i < len1 && i < len2; i++) {
             initiActions        [(int)stateActions[i].stateType] = stateActions[i].state.Init;
             tickActions         [(int)stateActions[i].stateType] = stateActions[i].state.Tick;
+            fixedTickActions    [(int)stateActions[i].stateType] = stateActions[i].state.FixedTick;
             enterStateActions   [(int)stateActions[i].stateType] = stateActions[i].state.EnterState;
             exitStateActions    [(int)stateActions[i].stateType] = stateActions[i].state.ExitState;
         }

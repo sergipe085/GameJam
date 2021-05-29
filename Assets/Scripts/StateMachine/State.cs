@@ -12,6 +12,10 @@ public class State : MonoBehaviour
 
     }
 
+    public virtual void FixedTick() {
+        
+    }
+
     public virtual void EnterState() {
         print("Enter on " + this.ToString());
     }

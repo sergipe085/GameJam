@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : State
+public class PlayerJumpState : State
 {
+    [Header("VALUES")]
+    [SerializeField] private float jumpForce = 10.0f;
+
     [Header("REFERENCES")]
-    private Rigidbody rig = null;
+    private Rigidbody   rig   = null;
 
     private void Awake() {
         rig = GetComponent<Rigidbody>();
@@ -19,14 +22,11 @@ public class PlayerIdleState : State
         base.Tick();
     }
 
-    public override void FixedTick() {
-        base.FixedTick();
-
-        rig.velocity = Vector3.Lerp(rig.velocity, new Vector3(0f, rig.velocity.y, 0f), Time.fixedDeltaTime * 10);
-    }
-
     public override void EnterState() {
         base.EnterState();
+
+        rig.velocity = Vector3.zero;
+        rig.AddForce(Vector3.up * jumpForce * Time.fixedDeltaTime, ForceMode.Impulse);
     }
 
     public override void ExitState() {
