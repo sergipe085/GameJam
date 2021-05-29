@@ -17,10 +17,10 @@ public class State : MonoBehaviour
     }
 
     public virtual void EnterState() {
-        print("Enter on " + this.ToString());
+        
     }
 
     public virtual void ExitState() {
-        print("Exit from " + this.ToString());
+        
     }
 }

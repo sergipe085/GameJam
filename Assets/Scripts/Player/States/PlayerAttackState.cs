@@ -7,6 +7,9 @@ public class PlayerAttackState : State
     [Header("REFERENCES")]
     private Animator anim;
 
+    [Header("ATTACK ANIMATIONS")]
+    private int attackIndex = 0;
+
     private void Awake()
     {
         anim = Camera.main.transform.parent.GetComponentInChildren<Animator>();
@@ -31,8 +34,16 @@ public class PlayerAttackState : State
     {
         base.EnterState();
 
+        if (PlayerStateMachine.instance.isAttacking) return;
+
+        attackIndex++;
+        attackIndex = attackIndex >= 2 ? 0 : attackIndex;
         anim.SetTrigger("attack");
+        anim.SetFloat("attackDir", attackIndex);
+
         CameraController.instance.StartScreenShake(0.3f, 0.06f, 1f);
+
+        PlayerStateMachine.instance.isAttacking = true;
     }
 
     public override void ExitState()

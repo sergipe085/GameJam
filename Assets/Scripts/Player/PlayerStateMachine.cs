@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class PlayerStateMachine : StateMachine
 {
+    public static PlayerStateMachine instance;
+
     [Header("STATES CHECKERS")]
-    public bool isAttacking = false;
+    [HideInInspector] public bool isAttacking = false;
+
+    protected override void Awake() {
+        base.Awake();
+        instance = this;
+    }
 
     protected override StatesTypes GetCurrentState() {
         InputStruct input = InputManager.CaptureInput();
@@ -15,7 +22,6 @@ public class PlayerStateMachine : StateMachine
         }
 
         if (input.attack) {
-            isAttacking = true;
             return StatesTypes.Attack;
         }
 
