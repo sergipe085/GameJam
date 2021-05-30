@@ -8,10 +8,12 @@ public class PlayerStateMachine : StateMachine
 
     [Header("CORE")]
     [SerializeField] LayerMask groundLayer;
+    [SerializeField] LayerMask dieGroundLayer;
 
     [Header("STATES CHECKERS")]
     [HideInInspector] public bool isAttacking = false;
     [HideInInspector] public bool isRewinding = false;
+    [HideInInspector] public bool dead        = false;
 
     [Header("REWIND")]
     public Vector3? rewindLocation = null;
@@ -21,9 +23,10 @@ public class PlayerStateMachine : StateMachine
         instance = this;
     }
 
-    protected override void FixedUpdate()
+    protected override void Update()
     {
-        base.FixedUpdate();
+        base.Update();
+        CheckDead();
     }
 
     protected override StatesTypes GetCurrentState() {
@@ -55,5 +58,11 @@ public class PlayerStateMachine : StateMachine
 
     private bool OnGround() {
         return Physics.Raycast(transform.position, Vector3.down, 0.2f, groundLayer);
+    }
+
+    private void CheckDead() {
+        if (Physics.Raycast(transform.position, Vector3.down, 0.2f, dieGroundLayer)) {
+            GetComponent<Health>().Die(null);
+        }
     }
 }
